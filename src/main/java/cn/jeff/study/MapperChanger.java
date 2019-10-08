@@ -1,21 +1,17 @@
 package cn.jeff.study;
 
 import cn.jeff.study.core.ConfigurationHelper;
-import org.apache.commons.io.IOUtils;
-import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
-import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.builder.xml.XMLStatementBuilder;
+import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.parsing.XPathParser;
 import org.apache.ibatis.session.Configuration;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author swzhang
@@ -23,10 +19,8 @@ import java.util.List;
  */
 public class MapperChanger {
 
-    public void changeMapperByFile(String filePath, String characterEncode, Configuration configuration, Class<?> mapperClass) throws IOException {
+    public void changeMapperByFile(String mapperXml, Configuration configuration, Class<?> mapperClass) throws IOException {
 
-        URI uri = URI.create(filePath);
-        String mapperXml = IOUtils.toString(uri, Charset.forName(characterEncode));
         XPathParser parser = new XPathParser(mapperXml);
         XNode mapperNode = parser.evalNode("/mapper");
         String namespace = mapperNode.getStringAttribute("namespace");
@@ -37,6 +31,8 @@ public class MapperChanger {
         if (nodeList == null || nodeList.isEmpty()) {
             return;
         }
+        ConfigurationHelper configurationHelper = new ConfigurationHelper(configuration);
+        Map<String, MappedStatement> mappedStatementMap = configurationHelper.getMappedStatementMap();
         nodeList.forEach(node -> {
             XMLStatementBuilder xmlStatementBuilder = null;
             if (configuration.getDatabaseId() != null) {
@@ -45,9 +41,10 @@ public class MapperChanger {
                 xmlStatementBuilder = new XMLStatementBuilder(configuration, mapperBuilderAssistant, node);
             }
 
+            String mapperId = node.getStringAttribute("id");
+            mapperId = mapperBuilderAssistant.applyCurrentNamespace(mapperId, false);
+            mappedStatementMap.remove(mapperId);
             xmlStatementBuilder.parseStatementNode();
-
-
 
         });
 

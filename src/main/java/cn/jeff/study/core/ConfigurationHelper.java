@@ -1,8 +1,10 @@
 package cn.jeff.study.core;
 
 import cn.jeff.study.util.ReflectUtlis;
+import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.Configuration;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -25,5 +27,9 @@ public class ConfigurationHelper {
 
     public Set<String> getLoadedResources() {
         return ReflectUtlis.getFieldObject("loadedResources", configuration);
+    }
+
+    public Map<String, MappedStatement> getMappedStatementMap() {
+        return ReflectUtlis.getFieldObject("mappedStatements", configuration);
     }
 }
