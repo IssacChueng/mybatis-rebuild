@@ -36,7 +36,7 @@ public class ReflectUtlis {
     private static <T> T getObjectFromField(Field field, Object obj) {
         field.setAccessible(true);
         try {
-            return (T)field.get(obj);
+            return (T) field.get(obj);
         } catch (IllegalAccessException e) {
             //ignore
         }

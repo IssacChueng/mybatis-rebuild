@@ -6,7 +6,6 @@ import org.objectweb.asm.ClassWriter;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 import static org.objectweb.asm.Opcodes.*;
 

@@ -1,6 +1,5 @@
 package cn.jeff.study.core;
 
-import cn.jeff.study.core.ConfigurationHelper;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.builder.xml.XMLStatementBuilder;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -14,7 +13,7 @@ import java.util.Map;
  * @author swzhang
  * @date 2019/10/10
  */
-public class StatementApplyer extends BaseApplyer{
+public class StatementApplyer extends BaseApplyer {
 
     public StatementApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
         super(configuration, mapperNode, namespace, resource);

@@ -1,7 +1,6 @@
 package cn.jeff.study;
 
 import cn.jeff.study.dao.ObjectMapper;
-import org.apache.commons.io.FileUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.Configuration;
@@ -17,13 +16,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 /**
  * @author swzhang
@@ -31,9 +26,10 @@ import java.util.Date;
  */
 public class MapperTests {
     private SqlSessionFactory sqlSessionFactory;
+
     @Before
     public void testConfiguration() throws IOException, SQLException {
-        try(Reader reader = Resources.getResourceAsReader("mybatis-config.xml")) {
+        try (Reader reader = Resources.getResourceAsReader("mybatis-config.xml")) {
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
             Configuration configuration = sqlSessionFactory.getConfiguration();
             DataSource dataSource = configuration.getEnvironment().getDataSource();
@@ -49,6 +45,7 @@ public class MapperTests {
         Assert.assertNotNull(mapper);
         System.out.println(mapper.selectOne());
     }
+
     @Test
     public void testSelectAfter() throws IOException {
         SqlSession sqlSession = sqlSessionFactory.openSession();
@@ -62,7 +59,7 @@ public class MapperTests {
     }
 
     @Test
-    public void testSelectInclude() throws IOException{
+    public void testSelectInclude() throws IOException {
         SqlSession sqlSession = sqlSessionFactory.openSession();
         MapperChanger mapperChanger = new MapperChanger();
         ObjectMapper mapper = sqlSession.getMapper(ObjectMapper.class);
@@ -78,7 +75,7 @@ public class MapperTests {
     }
 
     private void runScript(DataSource dataSource) throws SQLException, IOException {
-        try(Connection connection = dataSource.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             ScriptRunner scriptRunner = new ScriptRunner(connection);
             runScript(scriptRunner, "Init.sql");
         }

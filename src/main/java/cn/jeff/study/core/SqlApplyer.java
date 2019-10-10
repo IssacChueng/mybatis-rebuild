@@ -5,12 +5,12 @@ import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Mapper 文件中的sql节点,转换成Node存放在 {@link Configuration#getSqlFragments()} 中
+ *
  * @author swzhang
  * @date 2019/10/10
  */

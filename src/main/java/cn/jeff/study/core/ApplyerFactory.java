@@ -27,7 +27,7 @@ public class ApplyerFactory {
         this.resource = resource;
     }
 
-    public  <T extends BaseApplyer> T newApplyer(Class<T> type){
+    public <T extends BaseApplyer> T newApplyer(Class<T> type) {
         try {
             Constructor<T> applyerConstructor = type.getConstructor(Configuration.class, XNode.class, String.class, String.class);
             applyerConstructor.setAccessible(true);
