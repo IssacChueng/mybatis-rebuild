@@ -17,7 +17,10 @@ public abstract class BaseApplyer {
     protected String resource;
 
     public BaseApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
-        
+        this.configuration = configuration;
+        this.mapperNode = mapperNode;
+        this.namespace = namespace;
+        this.resource = resource;
     }
 
     protected abstract void apply();

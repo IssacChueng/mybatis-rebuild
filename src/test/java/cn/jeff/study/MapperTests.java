@@ -14,11 +14,16 @@ import org.junit.Test;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  * @author swzhang
@@ -49,11 +54,27 @@ public class MapperTests {
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
         MapperChanger mapperChanger = new MapperChanger();
-        String mapperXml = FileUtils.readFileToString(new File("/Users/jeff/git/mybatis-dynamic-statement/src/test/resources/mapper/ObjectAfterMapper.xml"), "utf-8");
+        FileReader mapperXml = new FileReader(new File("/Users/jeff/git/mybatis-dynamic-statement/src/test/resources/mapper/ObjectAfterMapper.xml"));
         mapperChanger.changeMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
         ObjectMapper mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         System.out.println(mapper.selectOne());
+    }
+
+    @Test
+    public void testSelectInclude() throws IOException{
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        MapperChanger mapperChanger = new MapperChanger();
+        ObjectMapper mapper = sqlSession.getMapper(ObjectMapper.class);
+        Assert.assertNotNull(mapper);
+        System.out.println(mapper.selectWithInclude());
+        System.out.println(Instant.now());
+        FileReader mapperXml = new FileReader(Resources.getResourceAsFile("mapper/ObjectAfterMapper.xml"));
+        System.out.println(Instant.now());
+        mapperChanger.changeMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
+        mapper = sqlSession.getMapper(ObjectMapper.class);
+        Assert.assertNotNull(mapper);
+        System.out.println(mapper.selectWithInclude());
     }
 
     private void runScript(DataSource dataSource) throws SQLException, IOException {

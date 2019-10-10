@@ -6,4 +6,6 @@ package cn.jeff.study.dao;
  */
 public interface ObjectMapper {
     Integer selectOne();
+
+    Integer selectWithInclude();
 }
