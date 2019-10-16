@@ -69,7 +69,7 @@ public class MapperTests {
         FileReader mapperXml = new FileReader(Resources.getResourceAsFile("mapper/ObjectAfterMapper.xml"));
         System.out.println(Instant.now());
         mapperChanger.changeMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
-        mapper = sqlSession.getMapper(ObjectMapper.class);
+//        mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         System.out.println(mapper.selectWithInclude());
     }

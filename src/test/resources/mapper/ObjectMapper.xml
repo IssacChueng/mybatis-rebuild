@@ -24,6 +24,10 @@
     <sql id="countId">
         count(id)
     </sql>
+    <resultMap id="d" type="string">
+        <constructor>
+        </constructor>
+    </resultMap>
     <select id="selectOne" resultType="java.lang.Integer">
         SELECT count(id) from t_o
     </select>

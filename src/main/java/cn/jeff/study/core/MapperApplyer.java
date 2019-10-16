@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class MapperApplyer extends BaseApplyer {
 
-    Class<? extends BaseApplyer>[] applyerClasses = new Class[]{SqlApplyer.class, StatementApplyer.class};
+    Class<? extends BaseApplyer>[] applyerClasses = new Class[]{ResultMapApplyer.class,SqlApplyer.class, StatementApplyer.class};
     private List<BaseApplyer> delegate = new LinkedList<>();
 
     public MapperApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
