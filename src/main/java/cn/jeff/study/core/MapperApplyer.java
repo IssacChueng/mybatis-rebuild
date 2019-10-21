@@ -34,6 +34,10 @@ public class MapperApplyer extends BaseApplyer {
 
     private void initApplyers() {
         ApplyerFactory applyerFactory = new ApplyerFactory(configuration, mapperNode, namespace, resource);
+        /*if (!configuration.isCacheEnabled()) {
+            //不推荐生产环境使用,因为缓存和session有关,存放在executor中, 这里只清理了Mapper中定义的cache
+            applyerClasses = new Class[]{ParameterMapApplyer.class, ResultMapApplyer.class,SqlApplyer.class, StatementApplyer.class};
+        }*/
         for (int i = 0; i < applyerClasses.length; i++) {
             Class<? extends BaseApplyer> applyerClass = applyerClasses[i];
             if (applyerClass == null) {
