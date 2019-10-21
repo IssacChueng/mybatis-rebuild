@@ -22,6 +22,17 @@
 
 <mapper namespace="cn.jeff.study.dao.ObjectMapper">
 
+    <resultMap id="base" type="cn.jeff.study.model.Obj">
+        <result property="id" column="name" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="d" type="cn.jeff.study.model.Obj" extends="base">
+        <result property="name" jdbcType="VARCHAR" column="id"/>
+    </resultMap>
+
+    <parameterMap id="condition" type="cn.jeff.study.model.Condition">
+        <parameter property="id" jdbcType="VARCHAR" javaType="String"/>
+        <parameter property="name" jdbcType="VARCHAR" javaType="String"/>
+    </parameterMap>
     <sql id="countId">
         count(id) + 1
     </sql>
@@ -34,5 +45,21 @@
         SELECT
         <include refid="countId"/>
         from t_o
+    </select>
+
+    <select id="selectObj" resultMap="d">
+        SELECT
+        id, name
+        FROM t_o
+    </select>
+    <select id="selectObjCondition" parameterMap="condition" resultMap="d">
+        SELECT
+        id, name
+        FROM t_o
+        <where>
+            id = #{id}
+            AND
+            name = #{name}
+        </where>
     </select>
 </mapper>

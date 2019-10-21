@@ -1,6 +1,7 @@
 package cn.jeff.study;
 
 import cn.jeff.study.dao.ObjectMapper;
+import cn.jeff.study.model.Condition;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.Configuration;
@@ -73,6 +74,39 @@ public class MapperTests {
         Assert.assertNotNull(mapper);
         System.out.println(mapper.selectWithInclude());
     }
+
+    @Test
+    public void testSelectObj() throws IOException {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        MapperChanger mapperChanger = new MapperChanger();
+        ObjectMapper mapper = sqlSession.getMapper(ObjectMapper.class);
+        Assert.assertNotNull(mapper);
+        FileReader mapperXml = new FileReader(Resources.getResourceAsFile("mapper/ObjectAfterMapper.xml"));
+        mapperChanger.changeMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
+//        mapper = sqlSession.getMapper(ObjectMapper.class);
+        Assert.assertNotNull(mapper);
+        System.out.println(mapper.selectObj());
+    }
+
+    @Test
+    public void testSelectCondition() throws IOException {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        MapperChanger mapperChanger = new MapperChanger();
+        ObjectMapper mapper = sqlSession.getMapper(ObjectMapper.class);
+        Assert.assertNotNull(mapper);
+        Condition condition = new Condition();
+        condition.setId("2");
+        condition.setName("2");
+        System.out.println(mapper.selectObjCondition(condition));
+        FileReader mapperXml = new FileReader(Resources.getResourceAsFile("mapper/ObjectAfterMapper.xml"));
+        mapperChanger.changeMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
+//        mapper = sqlSession.getMapper(ObjectMapper.class);
+        Assert.assertNotNull(mapper);
+        condition.setId("2");
+        condition.setName("2");
+        System.out.println(mapper.selectObjCondition(condition));
+    }
+
 
     private void runScript(DataSource dataSource) throws SQLException, IOException {
         try (Connection connection = dataSource.getConnection()) {

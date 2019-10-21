@@ -20,7 +20,17 @@ public class StatementApplyer extends BaseApplyer {
     }
 
     @Override
-    protected void apply() {
+    protected void preApply() {
+
+    }
+
+    @Override
+    protected void postApply() {
+
+    }
+
+    @Override
+    protected void doApply() {
         applyNewStatement();
     }
 
@@ -31,7 +41,6 @@ public class StatementApplyer extends BaseApplyer {
         if (nodeList == null || nodeList.isEmpty()) {
             return;
         }
-        ConfigurationHelper configurationHelper = new ConfigurationHelper(configuration);
         Map<String, MappedStatement> mappedStatementMap = configurationHelper.getMappedStatementMap();
         nodeList.forEach(node -> {
             XMLStatementBuilder xmlStatementBuilder = null;
@@ -42,8 +51,11 @@ public class StatementApplyer extends BaseApplyer {
             }
 
             String mapperId = node.getStringAttribute("id");
+
             mapperId = builderAssistant.applyCurrentNamespace(mapperId, false);
             mappedStatementMap.remove(mapperId);
+            String shortId = configurationHelper.getShortName(mapperId);
+            mappedStatementMap.remove(shortId);
             xmlStatementBuilder.parseStatementNode();
 
         });

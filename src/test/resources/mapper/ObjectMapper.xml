@@ -24,10 +24,16 @@
     <sql id="countId">
         count(id)
     </sql>
-    <resultMap id="d" type="string">
-        <constructor>
-        </constructor>
+    <resultMap id="base" type="cn.jeff.study.model.Obj">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
     </resultMap>
+    <resultMap id="d" type="cn.jeff.study.model.Obj" extends="base">
+        <result property="name" jdbcType="VARCHAR" column="name"/>
+    </resultMap>
+    
+    <parameterMap id="condition" type="cn.jeff.study.model.Condition">
+        <parameter property="name" jdbcType="VARCHAR" javaType="String"/>
+    </parameterMap>
     <select id="selectOne" resultType="java.lang.Integer">
         SELECT count(id) from t_o
     </select>
@@ -36,5 +42,21 @@
         SELECT
         <include refid="countId"/>
         from t_o
+    </select>
+
+    <select id="selectObj" resultMap="d">
+        SELECT
+        id, name
+        FROM t_o
+    </select>
+
+    <select id="selectObjCondition" parameterMap="condition" resultMap="d">
+        SELECT
+        id, name
+        FROM t_o
+        <where>
+            name = #{name}
+        </where>
+        LIMIT 1
     </select>
 </mapper>

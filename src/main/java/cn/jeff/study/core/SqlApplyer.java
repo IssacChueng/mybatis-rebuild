@@ -23,7 +23,17 @@ public class SqlApplyer extends BaseApplyer {
     }
 
     @Override
-    protected void apply() {
+    protected void preApply() {
+
+    }
+
+    @Override
+    protected void postApply() {
+
+    }
+
+    @Override
+    protected void doApply() {
         applySql();
     }
 

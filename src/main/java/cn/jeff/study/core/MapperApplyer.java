@@ -14,14 +14,22 @@ import java.util.List;
  */
 public class MapperApplyer extends BaseApplyer {
 
-    Class<? extends BaseApplyer>[] applyerClasses = new Class[]{ResultMapApplyer.class,SqlApplyer.class, StatementApplyer.class};
+    Class<? extends BaseApplyer>[] applyerClasses = new Class[]{CacheRefApplyer.class, CacheApplyer.class, ParameterMapApplyer.class, ResultMapApplyer.class,SqlApplyer.class, StatementApplyer.class};
     private List<BaseApplyer> delegate = new LinkedList<>();
 
     public MapperApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
         super(configuration, mapperNode, namespace, resource);
-        System.out.println("initApplyers starting" + Instant.now());
         initApplyers();
-        System.out.println("initApplyers end" + Instant.now());
+    }
+
+    @Override
+    protected void preApply() {
+
+    }
+
+    @Override
+    protected void postApply() {
+
     }
 
     private void initApplyers() {
@@ -36,16 +44,12 @@ public class MapperApplyer extends BaseApplyer {
             delegate.add(baseApplyer);
         }
 
-        builderAssistant = new MapperBuilderAssistant(configuration, resource);
-        builderAssistant.setCurrentNamespace(namespace);
     }
 
     @Override
-    public void apply() {
+    public void doApply() {
         for (BaseApplyer baseApplyer : delegate) {
-            System.out.println("apply starting" + Instant.now());
             baseApplyer.apply();
-            System.out.println("apply starting" + Instant.now());
         }
     }
 }

@@ -1,5 +1,8 @@
 package cn.jeff.study.util;
 
+import org.apache.ibatis.builder.BuilderException;
+import org.apache.ibatis.session.Configuration;
+
 import java.lang.reflect.Field;
 
 /**
@@ -41,5 +44,30 @@ public class ReflectUtlis {
             //ignore
         }
         return null;
+    }
+
+
+    public static  <T> Class<? extends T> resolveClass(Configuration configuration, String alias) {
+        if (alias == null) {
+            return null;
+        }
+        try {
+            return resolveAlias(configuration, alias);
+        } catch (Exception e) {
+            throw new BuilderException("Error resolving class. Cause: " + e, e);
+        }
+    }
+
+
+
+    public static  <T> Class<? extends T> resolveAlias(Configuration configuration, String alias) {
+        if (alias == null) {
+            return null;
+        }
+        try {
+            return configuration.getTypeAliasRegistry().resolveAlias(alias);
+        } catch (Exception e) {
+            throw new BuilderException("Error resolving class. Cause: " + e, e);
+        }
     }
 }
