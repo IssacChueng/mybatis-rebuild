@@ -1,19 +1,14 @@
 package cn.jeff.study.core;
 
 import org.apache.ibatis.builder.BuilderException;
-import org.apache.ibatis.builder.IncompleteElementException;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
-import org.apache.ibatis.builder.ResultMapResolver;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.mapping.Discriminator;
 import org.apache.ibatis.mapping.ResultFlag;
-import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.reflection.MetaClass;
 import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.TypeHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,14 +25,12 @@ public class ResultMapApplyer extends BaseApplyer {
 
     @Override
     protected void apply() {
-        //applyResultMap();
+        applyResultMap();
     }
 
     private void applyResultMap() {
 
         List<XNode> resultMapNodes = mapperNode.evalNodes("/mapper/resultMap");
-        MapperBuilderAssistant mapperBuilderAssistant = new MapperBuilderAssistant(configuration, resource);
-        mapperBuilderAssistant.setCurrentNamespace(namespace);
 
         resultMapNodes.forEach(resultMapNode -> {
             applyResultMapElement(resultMapNode, Collections.emptyList(), null);

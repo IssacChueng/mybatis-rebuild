@@ -1,5 +1,6 @@
 package cn.jeff.study.core;
 
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
 
@@ -15,6 +16,8 @@ public abstract class BaseApplyer {
     protected String namespace;
 
     protected String resource;
+
+    protected MapperBuilderAssistant builderAssistant;
 
     public BaseApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
         this.configuration = configuration;

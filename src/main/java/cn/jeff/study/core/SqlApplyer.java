@@ -30,14 +30,12 @@ public class SqlApplyer extends BaseApplyer {
     public void applySql() {
         sqlFragments = configuration.getSqlFragments();
         List<XNode> sqlNodes = mapperNode.evalNodes("/mapper/sql");
-        MapperBuilderAssistant mapperBuilderAssistant = new MapperBuilderAssistant(configuration, resource);
-        mapperBuilderAssistant.setCurrentNamespace(namespace);
 
         if (CollectionUtils.isNotEmpty(sqlNodes)) {
             sqlNodes.forEach(sqlNode -> {
                 String databaseId = sqlNode.getStringAttribute("databaseId");
                 String id = sqlNode.getStringAttribute("id");
-                id = mapperBuilderAssistant.applyCurrentNamespace(id, false);
+                id = builderAssistant.applyCurrentNamespace(id, false);
                 if (databaseIdMatchesCurrent(id, databaseId, configuration.getDatabaseId())) {
                     //防止configuration中已经存在相同id
                     sqlFragments.remove(id);

@@ -1,5 +1,6 @@
 package cn.jeff.study.core;
 
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
 
@@ -34,6 +35,9 @@ public class MapperApplyer extends BaseApplyer {
             BaseApplyer baseApplyer = applyerFactory.newApplyer(applyerClass);
             delegate.add(baseApplyer);
         }
+
+        builderAssistant = new MapperBuilderAssistant(configuration, resource);
+        builderAssistant.setCurrentNamespace(namespace);
     }
 
     @Override

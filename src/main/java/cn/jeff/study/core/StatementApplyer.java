@@ -26,8 +26,6 @@ public class StatementApplyer extends BaseApplyer {
 
 
     public void applyNewStatement() {
-        MapperBuilderAssistant mapperBuilderAssistant = new MapperBuilderAssistant(configuration, resource);
-        mapperBuilderAssistant.setCurrentNamespace(namespace);
 
         List<XNode> nodeList = mapperNode.evalNodes("select|insert|update|delete");
         if (nodeList == null || nodeList.isEmpty()) {
@@ -38,13 +36,13 @@ public class StatementApplyer extends BaseApplyer {
         nodeList.forEach(node -> {
             XMLStatementBuilder xmlStatementBuilder = null;
             if (configuration.getDatabaseId() != null) {
-                xmlStatementBuilder = new XMLStatementBuilder(configuration, mapperBuilderAssistant, node, configuration.getDatabaseId());
+                xmlStatementBuilder = new XMLStatementBuilder(configuration, builderAssistant, node, configuration.getDatabaseId());
             } else {
-                xmlStatementBuilder = new XMLStatementBuilder(configuration, mapperBuilderAssistant, node);
+                xmlStatementBuilder = new XMLStatementBuilder(configuration, builderAssistant, node);
             }
 
             String mapperId = node.getStringAttribute("id");
-            mapperId = mapperBuilderAssistant.applyCurrentNamespace(mapperId, false);
+            mapperId = builderAssistant.applyCurrentNamespace(mapperId, false);
             mappedStatementMap.remove(mapperId);
             xmlStatementBuilder.parseStatementNode();
 
