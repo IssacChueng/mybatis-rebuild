@@ -5,14 +5,16 @@ import org.apache.ibatis.builder.IncompleteElementException;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
 
+import java.util.Map;
+
 /**
  * @author swzhang
  * @date 2019/10/21
  */
-public class CacheRefApplyer extends BaseApplyer {
+public class CacheRefApplyer extends BaseCacheApplyer {
 
-    public CacheRefApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
-        super(configuration, mapperNode, namespace, resource);
+    public CacheRefApplyer(Configuration configuration, XNode mapperNode, String namespace) {
+        super(configuration, mapperNode, namespace);
     }
 
     @Override
@@ -33,6 +35,8 @@ public class CacheRefApplyer extends BaseApplyer {
 
     private void cacheRefElement(XNode context) {
         if (context != null) {
+            Map<String, String> cacheRefMap = configurationHelper.getCacheRefMap();
+            cacheRefMap.remove(builderAssistant.getCurrentNamespace());
             configuration.addCacheRef(builderAssistant.getCurrentNamespace(), context.getStringAttribute("namespace"));
             CacheRefResolver cacheRefResolver = new CacheRefResolver(builderAssistant, context.getStringAttribute("namespace"));
             try {

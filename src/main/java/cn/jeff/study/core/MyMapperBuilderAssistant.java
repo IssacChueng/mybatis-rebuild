@@ -1,7 +1,11 @@
 package cn.jeff.study.core;
 
+import cn.jeff.study.util.MixUtils;
+import org.apache.ibatis.builder.IncompleteElementException;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.cache.Cache;
+import org.apache.ibatis.cache.decorators.LruCache;
+import org.apache.ibatis.cache.impl.PerpetualCache;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.scripting.LanguageDriver;
@@ -18,6 +22,8 @@ import java.util.Properties;
 public class MyMapperBuilderAssistant extends MapperBuilderAssistant {
 
     private ConfigurationHelper configurationHelper;
+
+    private Cache currentCache;
 
     public MyMapperBuilderAssistant(Configuration configuration, String resource) {
         super(configuration, resource);
@@ -61,9 +67,15 @@ public class MyMapperBuilderAssistant extends MapperBuilderAssistant {
             LanguageDriver lang,
             String resultSets) {
 
-        Map<String, MappedStatement> mappedStatementMap = configurationHelper.getMappedStatementMap();
-        removeFromMap(mappedStatementMap, id);
-        return super.addMappedStatement(id, sqlSource, statementType, sqlCommandType, fetchSize, timeout, parameterMap, parameterType, resultMap, resultType, resultSetType, flushCache, useCache, resultOrdered, keyGenerator, keyProperty, keyColumn, databaseId, lang, resultSets);
+        MappedStatement mappedStatement = null;
+        try {
+            mappedStatement = super.addMappedStatement(id, sqlSource, statementType, sqlCommandType, fetchSize, timeout, parameterMap, parameterType, resultMap, resultType, resultSetType, flushCache, useCache, resultOrdered, keyGenerator, keyProperty, keyColumn, databaseId, lang, resultSets);
+        } catch (Exception e) {
+            mappedStatement = configuration.getMappedStatement(applyCurrentNamespace(id, false));
+
+        }
+        return mappedStatement;
+
     }
 
     public Cache useNewCache(
@@ -78,7 +90,24 @@ public class MyMapperBuilderAssistant extends MapperBuilderAssistant {
         Map<String, Cache> caches = configurationHelper.getCaches();
         caches.remove(getCurrentNamespace());
         caches.remove(configurationHelper.getShortName(getCurrentNamespace()));
-        return super.useNewCache(typeClass, evictionClass, flushInterval, size, readWrite, blocking, props);
+        Cache cache = new CacheBuilder(getCurrentNamespace())
+                .implementation(MixUtils.valueOrDefault(typeClass, PerpetualCache.class))
+                .addDecorator(MixUtils.valueOrDefault(evictionClass, LruCache.class))
+                .clearInterval(flushInterval)
+                .size(size)
+                .readWrite(readWrite)
+                .blocking(blocking)
+                .properties(props)
+                .build();
+        setNewValueMap(caches, getCurrentNamespace(), cache);
+        currentCache = cache;
+        return cache;
+    }
+
+    private <K, V> void setNewValueMap(Map<K, V> map, K key, V value) {
+        map.computeIfPresent(key, (k, v) -> value);
+        String shortKey = configurationHelper.getShortName(getCurrentNamespace());
+        map.computeIfPresent((K)shortKey, (k, v) -> value);
     }
 
     private void removeFromMap(Map<String, ?> map, String id) {

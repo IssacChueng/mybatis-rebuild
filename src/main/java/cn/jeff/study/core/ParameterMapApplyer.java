@@ -11,16 +11,14 @@ import org.apache.ibatis.type.TypeHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cn.jeff.study.util.ReflectUtlis.resolveClass;
-
 /**
  * @author swzhang
  * @date 2019/10/21
  */
 public class ParameterMapApplyer extends BaseApplyer {
 
-    public ParameterMapApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
-        super(configuration, mapperNode, namespace, resource);
+    public ParameterMapApplyer(Configuration configuration, XNode mapperNode, String namespace) {
+        super(configuration, mapperNode, namespace);
     }
 
     @Override
@@ -44,7 +42,7 @@ public class ParameterMapApplyer extends BaseApplyer {
         for (XNode parameterMapNode : list) {
             String id = parameterMapNode.getStringAttribute("id");
             String type = parameterMapNode.getStringAttribute("type");
-            Class<?> parameterClass = resolveClass(configuration, type);
+            Class<?> parameterClass = configurationHelper.resolveClass(type);
             List<XNode> parameterNodes = parameterMapNode.evalNodes("parameter");
             List<ParameterMapping> parameterMappings = new ArrayList<>();
             for (XNode parameterNode : parameterNodes) {
@@ -56,9 +54,9 @@ public class ParameterMapApplyer extends BaseApplyer {
                 String typeHandler = parameterNode.getStringAttribute("typeHandler");
                 Integer numericScale = parameterNode.getIntAttribute("numericScale");
                 ParameterMode modeEnum = resolveParameterMode(mode);
-                Class<?> javaTypeClass = resolveClass(configuration, javaType);
+                Class<?> javaTypeClass = configurationHelper.resolveClass(javaType);
                 JdbcType jdbcTypeEnum = resolveJdbcType(jdbcType);
-                Class<? extends TypeHandler<?>> typeHandlerClass = resolveClass(configuration, typeHandler);
+                Class<? extends TypeHandler<?>> typeHandlerClass = configurationHelper.resolveClass(typeHandler);
                 ParameterMapping parameterMapping = builderAssistant.buildParameterMapping(parameterClass, property, javaTypeClass, jdbcTypeEnum, resultMap, modeEnum, typeHandlerClass, numericScale);
                 parameterMappings.add(parameterMapping);
             }

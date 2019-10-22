@@ -1,12 +1,10 @@
 package cn.jeff.study;
 
-import cn.jeff.study.core.MapperApplyer;
+import cn.jeff.study.core.MapperApplyerLink;
 import org.apache.ibatis.parsing.XNode;
-import org.apache.ibatis.parsing.XPathParser;
 import org.apache.ibatis.session.Configuration;
 
 import java.io.IOException;
-import java.io.Reader;
 
 /**
  * @author swzhang
@@ -14,13 +12,9 @@ import java.io.Reader;
  */
 public class MapperReplacer {
 
-    public void replaceMapperByFile(Reader mapperXml, Configuration configuration, Class<?> mapperClass) throws IOException {
-        XPathParser parser = new XPathParser(mapperXml);
-        XNode mapperNode = parser.evalNode("/mapper");
-        String namespace = mapperNode.getStringAttribute("namespace");
-        String resource = mapperClass.getName().replace(".", "/") + ".xml";
+    public void replaceMapperByFile(XNode mapperNode, Configuration configuration, String resource, boolean useCache) throws IOException {
 
-        new MapperApplyer(configuration, mapperNode, namespace, resource).apply();
+        new MapperApplyerLink(configuration, mapperNode,  resource).callApply();
 
     }
 

@@ -1,6 +1,7 @@
 package cn.jeff.study.core;
 
 import cn.jeff.study.util.ReflectUtlis;
+import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMap;
@@ -48,8 +49,34 @@ public class ConfigurationHelper {
         return ReflectUtlis.getFieldObject("caches", configuration);
     }
 
+    public Map<String, String> getCacheRefMap() {
+        return ReflectUtlis.getFieldObject("cacheRefMap", configuration);
+    }
+
+    public <T> Class<? extends T> resolveClass(String alias) {
+        if (alias == null) {
+            return null;
+        }
+        try {
+            return resolveAlias(alias);
+        } catch (Exception e) {
+            throw new BuilderException("Error resolving class. Cause: " + e, e);
+        }
+    }
+
+    public <T> Class<? extends T> resolveAlias(String alias) {
+        if (alias == null) {
+            return null;
+        }
+        try {
+            return configuration.getTypeAliasRegistry().resolveAlias(alias);
+        } catch (Exception e) {
+            throw new BuilderException("Error resolving class. Cause: " + e, e);
+        }
+    }
     public String getShortName(String key) {
         final String[] keyParts = key.split("\\.");
         return keyParts[keyParts.length - 1];
     }
+
 }

@@ -1,6 +1,5 @@
 package cn.jeff.study.core;
 
-import cn.jeff.study.util.ReflectUtlis;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
@@ -11,10 +10,10 @@ import java.util.Properties;
  * @author swzhang
  * @date 2019/10/21
  */
-public class CacheApplyer extends BaseApplyer {
+public class CacheApplyer extends BaseCacheApplyer {
 
-    public CacheApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
-        super(configuration, mapperNode, namespace, resource);
+    public CacheApplyer(Configuration configuration, XNode mapperNode, String namespace) {
+        super(configuration, mapperNode, namespace);
     }
 
     @Override
@@ -29,6 +28,8 @@ public class CacheApplyer extends BaseApplyer {
 
     @Override
     protected void doApply() {
+        //如果原先有其他mapper指向这个cache，并且当前cache被删除，则原先cache不受影响
+        //如果当前cache没有被删除，则需要将原来的cache重新指向这个新的cache
         XNode cacheNode = mapperNode.evalNode("cache");
         cacheElement(cacheNode);
     }
@@ -37,9 +38,9 @@ public class CacheApplyer extends BaseApplyer {
     private void cacheElement(XNode context) {
         if (context != null) {
             String type = context.getStringAttribute("type", "PERPETUAL");
-            Class<? extends Cache> typeClass = ReflectUtlis.resolveAlias(configuration, type);
+            Class<? extends Cache> typeClass = configurationHelper.resolveAlias(type);
             String eviction = context.getStringAttribute("eviction", "LRU");
-            Class<? extends Cache> evictionClass = ReflectUtlis.resolveAlias(configuration, eviction);
+            Class<? extends Cache> evictionClass = configurationHelper.resolveAlias(eviction);
             Long flushInterval = context.getLongAttribute("flushInterval");
             Integer size = context.getIntAttribute("size");
             boolean readWrite = !context.getBooleanAttribute("readOnly", false);

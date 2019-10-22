@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public class StatementApplyer extends BaseApplyer {
 
-    public StatementApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
-        super(configuration, mapperNode, namespace, resource);
+    public StatementApplyer(Configuration configuration, XNode mapperNode, String namespace) {
+        super(configuration, mapperNode, namespace);
     }
 
     @Override

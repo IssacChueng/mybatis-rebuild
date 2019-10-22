@@ -13,7 +13,7 @@ public class FactoryTests {
 
     @Test
     public void testNew() {
-        ApplyerFactory applyerFactory = new ApplyerFactory(null, null, null, null);
+        ApplyerFactory applyerFactory = new ApplyerFactory(null, null, null);
         BaseApplyer baseApplyer = applyerFactory.newApplyer(SqlApplyer.class);
         System.out.println(baseApplyer.getClass());
     }

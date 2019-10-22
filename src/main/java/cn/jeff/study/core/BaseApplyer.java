@@ -15,17 +15,15 @@ public abstract class BaseApplyer {
 
     protected String namespace;
 
-    protected String resource;
 
     protected MapperBuilderAssistant builderAssistant;
 
     protected ConfigurationHelper configurationHelper;
 
-    public BaseApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
+    public BaseApplyer(Configuration configuration, XNode mapperNode, String namespace) {
         this.configuration = configuration;
         this.mapperNode = mapperNode;
         this.namespace = namespace;
-        this.resource = resource;
         configurationHelper = new ConfigurationHelper(configuration);
     }
 

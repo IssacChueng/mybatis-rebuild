@@ -4,6 +4,8 @@ import cn.jeff.study.dao.ObjectMapper;
 import cn.jeff.study.model.Condition;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
+import org.apache.ibatis.parsing.XNode;
+import org.apache.ibatis.parsing.XPathParser;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -53,7 +55,9 @@ public class MapperTests {
 
         MapperReplacer mapperReplacer = new MapperReplacer();
         FileReader mapperXml = new FileReader(new File("/Users/jeff/git/mybatis-dynamic-statement/src/test/resources/mapper/ObjectAfterMapper.xml"));
-        mapperReplacer.replaceMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
+        XPathParser parser = new XPathParser(mapperXml);
+        XNode mapperNode = parser.evalNode("/mapper");
+        mapperReplacer.replaceMapperByFile(mapperNode, sqlSessionFactory.getConfiguration(), ObjectMapper.class.getName().replace(".", "/") + ".xml", false);
         ObjectMapper mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         System.out.println(mapper.selectOne());
@@ -69,7 +73,9 @@ public class MapperTests {
         System.out.println(Instant.now());
         FileReader mapperXml = new FileReader(Resources.getResourceAsFile("mapper/ObjectAfterMapper.xml"));
         System.out.println(Instant.now());
-        mapperReplacer.replaceMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
+        XPathParser parser = new XPathParser(mapperXml);
+        XNode mapperNode = parser.evalNode("/mapper");
+        mapperReplacer.replaceMapperByFile(mapperNode, sqlSessionFactory.getConfiguration(), ObjectMapper.class.getName().replace(".", "/") + ".xml", false);
 //        mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         System.out.println(mapper.selectWithInclude());
@@ -82,7 +88,9 @@ public class MapperTests {
         ObjectMapper mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         FileReader mapperXml = new FileReader(Resources.getResourceAsFile("mapper/ObjectAfterMapper.xml"));
-        mapperReplacer.replaceMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
+        XPathParser parser = new XPathParser(mapperXml);
+        XNode mapperNode = parser.evalNode("/mapper");
+        mapperReplacer.replaceMapperByFile(mapperNode, sqlSessionFactory.getConfiguration(), ObjectMapper.class.getName().replace(".", "/") + ".xml", false);
 //        mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         System.out.println(mapper.selectObj());
@@ -99,7 +107,9 @@ public class MapperTests {
         condition.setName("2");
         System.out.println(mapper.selectObjCondition(condition));
         FileReader mapperXml = new FileReader(Resources.getResourceAsFile("mapper/ObjectAfterMapper.xml"));
-        mapperReplacer.replaceMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
+        XPathParser parser = new XPathParser(mapperXml);
+        XNode mapperNode = parser.evalNode("/mapper");
+        mapperReplacer.replaceMapperByFile(mapperNode, sqlSessionFactory.getConfiguration(), ObjectMapper.class.getName().replace(".", "/") + ".xml", true);
 //        mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         condition.setId("2");

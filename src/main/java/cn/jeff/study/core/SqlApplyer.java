@@ -17,8 +17,8 @@ public class SqlApplyer extends BaseApplyer {
 
     private Map<String, XNode> sqlFragments;
 
-    public SqlApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
-        super(configuration, mapperNode, namespace, resource);
+    public SqlApplyer(Configuration configuration, XNode mapperNode, String namespace) {
+        super(configuration, mapperNode, namespace);
     }
 
     @Override

@@ -22,8 +22,8 @@ import java.util.*;
  */
 public class ResultMapApplyer extends BaseApplyer {
 
-    public ResultMapApplyer(Configuration configuration, XNode mapperNode, String namespace, String resource) {
-        super(configuration, mapperNode, namespace, resource);
+    public ResultMapApplyer(Configuration configuration, XNode mapperNode, String namespace) {
+        super(configuration, mapperNode, namespace);
     }
 
     @Override

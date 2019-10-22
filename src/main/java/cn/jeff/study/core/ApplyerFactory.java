@@ -17,21 +17,18 @@ public class ApplyerFactory {
 
     private String namespace;
 
-    private String resource;
 
-
-    public ApplyerFactory(Configuration configuration, XNode mapperNode, String namespace, String resource) {
+    public ApplyerFactory(Configuration configuration, XNode mapperNode, String namespace) {
         this.configuration = configuration;
         this.mapperNode = mapperNode;
         this.namespace = namespace;
-        this.resource = resource;
     }
 
     public <T extends BaseApplyer> T newApplyer(Class<T> type) {
         try {
-            Constructor<T> applyerConstructor = type.getConstructor(Configuration.class, XNode.class, String.class, String.class);
+            Constructor<T> applyerConstructor = type.getConstructor(Configuration.class, XNode.class, String.class);
             applyerConstructor.setAccessible(true);
-            return applyerConstructor.newInstance(configuration, mapperNode, namespace, resource);
+            return applyerConstructor.newInstance(configuration, mapperNode, namespace);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             //ignore
             return null;
