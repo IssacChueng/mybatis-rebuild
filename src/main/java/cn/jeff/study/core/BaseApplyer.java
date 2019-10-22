@@ -29,7 +29,7 @@ public abstract class BaseApplyer {
         configurationHelper = new ConfigurationHelper(configuration);
     }
 
-    protected  abstract void preApply();
+    protected abstract void preApply();
 
     protected abstract void postApply();
 

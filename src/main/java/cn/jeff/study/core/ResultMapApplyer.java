@@ -153,7 +153,7 @@ public class ResultMapApplyer extends BaseApplyer {
         ResultMapResolver resultMapResolver = new ResultMapResolver(builderAssistant, id, typeClass, extend, discriminator, resultMappings, autoMapping);
         try {
             return resultMapResolver.resolve();
-        } catch (IncompleteElementException  e) {
+        } catch (IncompleteElementException e) {
             configuration.addIncompleteResultMap(resultMapResolver);
             throw e;
         }

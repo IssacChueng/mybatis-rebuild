@@ -1,6 +1,5 @@
 package cn.jeff.study.core;
 
-import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.builder.xml.XMLStatementBuilder;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.parsing.XNode;

@@ -5,7 +5,6 @@ import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
 
-import java.util.Map;
 import java.util.Properties;
 
 /**

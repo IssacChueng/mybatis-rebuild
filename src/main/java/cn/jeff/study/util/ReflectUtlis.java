@@ -47,7 +47,7 @@ public class ReflectUtlis {
     }
 
 
-    public static  <T> Class<? extends T> resolveClass(Configuration configuration, String alias) {
+    public static <T> Class<? extends T> resolveClass(Configuration configuration, String alias) {
         if (alias == null) {
             return null;
         }
@@ -59,8 +59,7 @@ public class ReflectUtlis {
     }
 
 
-
-    public static  <T> Class<? extends T> resolveAlias(Configuration configuration, String alias) {
+    public static <T> Class<? extends T> resolveAlias(Configuration configuration, String alias) {
         if (alias == null) {
             return null;
         }

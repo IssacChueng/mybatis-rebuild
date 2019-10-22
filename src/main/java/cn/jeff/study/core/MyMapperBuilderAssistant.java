@@ -1,6 +1,5 @@
 package cn.jeff.study.core;
 
-import org.apache.ibatis.builder.IncompleteElementException;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.executor.keygen.KeyGenerator;

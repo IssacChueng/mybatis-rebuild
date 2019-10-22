@@ -7,7 +7,6 @@ import org.apache.ibatis.session.Configuration;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.time.Instant;
 
 /**
  * @author swzhang
