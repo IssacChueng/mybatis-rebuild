@@ -34,10 +34,14 @@ public class MapperApplyer extends BaseApplyer {
 
     private void initApplyers() {
         ApplyerFactory applyerFactory = new ApplyerFactory(configuration, mapperNode, namespace, resource);
-        /*if (!configuration.isCacheEnabled()) {
-            //不推荐生产环境使用,因为缓存和session有关,存放在executor中, 这里只清理了Mapper中定义的cache
+        if (!configuration.isCacheEnabled()) {
+            //不推荐生产环境使用,因为缓存和session有关,存放在executor中, 这里只清理了Mapper中定义的cache,无法清理localCache 并且代价是原来的Cache将会被保留在Executor的tcm里面
             applyerClasses = new Class[]{ParameterMapApplyer.class, ResultMapApplyer.class,SqlApplyer.class, StatementApplyer.class};
-        }*/
+        }
+
+        MapperBuilderAssistant builderAssistant = new MyMapperBuilderAssistant(configuration, resource);
+        builderAssistant.setCurrentNamespace(namespace);
+
         for (int i = 0; i < applyerClasses.length; i++) {
             Class<? extends BaseApplyer> applyerClass = applyerClasses[i];
             if (applyerClass == null) {
@@ -45,6 +49,7 @@ public class MapperApplyer extends BaseApplyer {
             }
 
             BaseApplyer baseApplyer = applyerFactory.newApplyer(applyerClass);
+            baseApplyer.builderAssistant = builderAssistant;
             delegate.add(baseApplyer);
         }
 

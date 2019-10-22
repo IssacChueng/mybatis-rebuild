@@ -51,9 +51,9 @@ public class MapperTests {
     public void testSelectAfter() throws IOException {
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
-        MapperChanger mapperChanger = new MapperChanger();
+        MapperReplacer mapperReplacer = new MapperReplacer();
         FileReader mapperXml = new FileReader(new File("/Users/jeff/git/mybatis-dynamic-statement/src/test/resources/mapper/ObjectAfterMapper.xml"));
-        mapperChanger.changeMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
+        mapperReplacer.replaceMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
         ObjectMapper mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         System.out.println(mapper.selectOne());
@@ -62,14 +62,14 @@ public class MapperTests {
     @Test
     public void testSelectInclude() throws IOException {
         SqlSession sqlSession = sqlSessionFactory.openSession();
-        MapperChanger mapperChanger = new MapperChanger();
+        MapperReplacer mapperReplacer = new MapperReplacer();
         ObjectMapper mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         System.out.println(mapper.selectWithInclude());
         System.out.println(Instant.now());
         FileReader mapperXml = new FileReader(Resources.getResourceAsFile("mapper/ObjectAfterMapper.xml"));
         System.out.println(Instant.now());
-        mapperChanger.changeMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
+        mapperReplacer.replaceMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
 //        mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         System.out.println(mapper.selectWithInclude());
@@ -78,11 +78,11 @@ public class MapperTests {
     @Test
     public void testSelectObj() throws IOException {
         SqlSession sqlSession = sqlSessionFactory.openSession();
-        MapperChanger mapperChanger = new MapperChanger();
+        MapperReplacer mapperReplacer = new MapperReplacer();
         ObjectMapper mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         FileReader mapperXml = new FileReader(Resources.getResourceAsFile("mapper/ObjectAfterMapper.xml"));
-        mapperChanger.changeMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
+        mapperReplacer.replaceMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
 //        mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         System.out.println(mapper.selectObj());
@@ -91,7 +91,7 @@ public class MapperTests {
     @Test
     public void testSelectCondition() throws IOException {
         SqlSession sqlSession = sqlSessionFactory.openSession();
-        MapperChanger mapperChanger = new MapperChanger();
+        MapperReplacer mapperReplacer = new MapperReplacer();
         ObjectMapper mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         Condition condition = new Condition();
@@ -99,7 +99,7 @@ public class MapperTests {
         condition.setName("2");
         System.out.println(mapper.selectObjCondition(condition));
         FileReader mapperXml = new FileReader(Resources.getResourceAsFile("mapper/ObjectAfterMapper.xml"));
-        mapperChanger.changeMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
+        mapperReplacer.replaceMapperByFile(mapperXml, sqlSessionFactory.getConfiguration(), ObjectMapper.class);
 //        mapper = sqlSession.getMapper(ObjectMapper.class);
         Assert.assertNotNull(mapper);
         condition.setId("2");

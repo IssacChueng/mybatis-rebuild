@@ -13,9 +13,9 @@ import java.time.Instant;
  * @author swzhang
  * @date 2019/09/27
  */
-public class MapperChanger {
+public class MapperReplacer {
 
-    public void changeMapperByFile(Reader mapperXml, Configuration configuration, Class<?> mapperClass) throws IOException {
+    public void replaceMapperByFile(Reader mapperXml, Configuration configuration, Class<?> mapperClass) throws IOException {
         XPathParser parser = new XPathParser(mapperXml);
         XNode mapperNode = parser.evalNode("/mapper");
         String namespace = mapperNode.getStringAttribute("namespace");

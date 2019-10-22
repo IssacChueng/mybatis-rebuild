@@ -46,8 +46,7 @@ public class CacheApplyer extends BaseApplyer {
             boolean readWrite = !context.getBooleanAttribute("readOnly", false);
             boolean blocking = context.getBooleanAttribute("blocking", false);
             Properties props = context.getChildrenAsProperties();
-            Map<String, Cache> caches = configurationHelper.getCaches();
-            caches.remove(namespace);
+
             builderAssistant.useNewCache(typeClass, evictionClass, flushInterval, size, readWrite, blocking, props);
         }
     }

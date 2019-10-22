@@ -26,9 +26,6 @@ public abstract class BaseApplyer {
         this.mapperNode = mapperNode;
         this.namespace = namespace;
         this.resource = resource;
-        this.builderAssistant = new MyMapperBuilderAssistant(configuration, resource);
-        builderAssistant.setCurrentNamespace(namespace);
-
         configurationHelper = new ConfigurationHelper(configuration);
     }
 

@@ -2,6 +2,7 @@ package cn.jeff.study.core;
 
 import org.apache.ibatis.builder.IncompleteElementException;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
+import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.scripting.LanguageDriver;
@@ -9,6 +10,7 @@ import org.apache.ibatis.session.Configuration;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author swzhang
@@ -63,6 +65,21 @@ public class MyMapperBuilderAssistant extends MapperBuilderAssistant {
         Map<String, MappedStatement> mappedStatementMap = configurationHelper.getMappedStatementMap();
         removeFromMap(mappedStatementMap, id);
         return super.addMappedStatement(id, sqlSource, statementType, sqlCommandType, fetchSize, timeout, parameterMap, parameterType, resultMap, resultType, resultSetType, flushCache, useCache, resultOrdered, keyGenerator, keyProperty, keyColumn, databaseId, lang, resultSets);
+    }
+
+    public Cache useNewCache(
+            Class<? extends Cache> typeClass,
+            Class<? extends Cache> evictionClass,
+            Long flushInterval,
+            Integer size,
+            boolean readWrite,
+            boolean blocking,
+            Properties props
+    ) {
+        Map<String, Cache> caches = configurationHelper.getCaches();
+        caches.remove(getCurrentNamespace());
+        caches.remove(configurationHelper.getShortName(getCurrentNamespace()));
+        return super.useNewCache(typeClass, evictionClass, flushInterval, size, readWrite, blocking, props);
     }
 
     private void removeFromMap(Map<String, ?> map, String id) {

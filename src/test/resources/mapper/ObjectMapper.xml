@@ -21,6 +21,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.jeff.study.dao.ObjectMapper">
+    <cache eviction="LRU" flushInterval="3000"/>
     <sql id="countId">
         count(id)
     </sql>
@@ -50,7 +51,7 @@
         FROM t_o
     </select>
 
-    <select id="selectObjCondition" parameterMap="condition" resultMap="d">
+    <select id="selectObjCondition" parameterMap="condition" resultMap="d" useCache="true">
         SELECT
         id, name
         FROM t_o

@@ -21,7 +21,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.jeff.study.dao.ObjectMapper">
-
+    <cache flushInterval="3000"/>
     <resultMap id="base" type="cn.jeff.study.model.Obj">
         <result property="id" column="name" jdbcType="VARCHAR"/>
     </resultMap>
@@ -52,7 +52,7 @@
         id, name
         FROM t_o
     </select>
-    <select id="selectObjCondition" parameterMap="condition" resultMap="d">
+    <select id="selectObjCondition" parameterMap="condition" resultMap="d" useCache="true">
         SELECT
         id, name
         FROM t_o
