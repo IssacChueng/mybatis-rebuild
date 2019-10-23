@@ -54,12 +54,13 @@
     </select>
     <select id="selectOneByCondition" parameterMap="condition" resultMap="d" useCache="true">
         SELECT
-        id, `desc`
+        id, desc
         FROM t_bean
         <where>
             id = #{id}
             AND
-            `desc` = #{name}
+            desc = #{name}
         </where>
+        LIMIT 1
     </select>
 </mapper>
