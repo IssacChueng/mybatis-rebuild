@@ -1,7 +1,7 @@
 package cn.jeff.study;
 
 import cn.jeff.study.cache.CacheContext;
-import cn.jeff.study.core.CacheApplyerLink;
+import cn.jeff.study.applyer.CacheApplyerLink;
 import org.apache.ibatis.session.Configuration;
 
 import java.util.List;

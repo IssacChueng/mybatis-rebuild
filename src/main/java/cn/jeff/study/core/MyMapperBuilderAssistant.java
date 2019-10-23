@@ -23,8 +23,6 @@ public class MyMapperBuilderAssistant extends MapperBuilderAssistant {
 
     private ConfigurationHelper configurationHelper;
 
-    private Cache currentCache;
-
     public MyMapperBuilderAssistant(Configuration configuration, String resource) {
         super(configuration, resource);
         configurationHelper = new ConfigurationHelper(configuration);
@@ -100,7 +98,6 @@ public class MyMapperBuilderAssistant extends MapperBuilderAssistant {
                 .properties(props)
                 .build();
         setNewValueMap(caches, getCurrentNamespace(), cache);
-        currentCache = cache;
         return cache;
     }
 

@@ -1,4 +1,4 @@
-package cn.jeff.study.core;
+package cn.jeff.study.applyer;
 
 import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.builder.IncompleteElementException;

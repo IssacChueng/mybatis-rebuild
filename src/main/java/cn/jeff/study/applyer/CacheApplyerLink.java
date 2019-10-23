@@ -1,7 +1,6 @@
-package cn.jeff.study.core;
+package cn.jeff.study.applyer;
 
 import cn.jeff.study.cache.CacheContext;
-import cn.jeff.study.util.ReflectUtlis;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
@@ -46,6 +45,8 @@ public class CacheApplyerLink extends BaseApplyerLink {
                 baseCacheApplyer.setCacheContexts(cacheContexts);
                 baseCacheApplyer.setCaches(caches);
                 baseCacheApplyer.setCacheRefs(cacheRefs);
+                //每解析一个resource，都需要重新设置
+                baseCacheApplyer.builderAssistant = null;
             }
         });
     }
@@ -54,6 +55,7 @@ public class CacheApplyerLink extends BaseApplyerLink {
     public void callApply() {
         super.callApply();
 
+        addPendingCaches();
     }
 
     private void addPendingCaches() {
@@ -62,10 +64,26 @@ public class CacheApplyerLink extends BaseApplyerLink {
             try {
                 configurationHelperCaches.put(key, value);
             } catch (IllegalArgumentException e) {
-                configurationHelperCaches.remove(key);
-                //configurationHelperCaches.computeIfPresent()
-                configurationHelperCaches.put(key, value);
+                configurationHelperCaches.computeIfPresent(key, (k, v) -> value);
             }
         });
+
+        //此时所有cache都咦经在caches中，再将指向cache-ref重新指向cache
+        //如果原先已经有其他cache-ref指向被更新掉的cache，并且没有更新statement，则在statement中的cache还是更新之前的cache
+        Map<String, String> configurationHelperCacheRefMap = configurationHelper.getCacheRefMap();
+        cacheRefs.forEach((key, value) -> {
+            try {
+                configurationHelperCacheRefMap.put(key, value);
+            } catch (IllegalArgumentException e) {
+                configurationHelperCacheRefMap.computeIfPresent(key, (k, v) -> value);
+            }
+            Cache cache = configurationHelperCaches.get(value);
+            try {
+                configurationHelperCaches.put(key, cache);
+            } catch (IllegalArgumentException e) {
+                configurationHelperCaches.computeIfPresent(key, (k, v) -> cache);
+            }
+        });
+
     }
 }

@@ -1,6 +1,6 @@
 package cn.jeff.study;
 
-import cn.jeff.study.core.MapperApplyerLink;
+import cn.jeff.study.applyer.MapperApplyerLink;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
 

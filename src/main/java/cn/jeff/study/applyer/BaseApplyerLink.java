@@ -1,5 +1,8 @@
-package cn.jeff.study.core;
+package cn.jeff.study.applyer;
 
+import cn.jeff.study.core.ApplyerFactory;
+import cn.jeff.study.core.ConfigurationHelper;
+import cn.jeff.study.core.MyMapperBuilderAssistant;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
@@ -40,6 +43,10 @@ public abstract class BaseApplyerLink {
             throw new IllegalArgumentException("namespace can not be empty");
         }
         builderAssistant.setCurrentNamespace(namespace);
+        //此时已经处理好所有缓存
+        if (configuration.isCacheEnabled()) {
+            builderAssistant.useCacheRef(namespace);
+        }
 
         setApplyerClass();
         initApplyers();

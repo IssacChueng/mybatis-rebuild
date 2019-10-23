@@ -1,4 +1,4 @@
-package cn.jeff.study.core;
+package cn.jeff.study.applyer;
 
 import cn.jeff.study.util.CollectionUtils;
 import org.apache.ibatis.parsing.XNode;

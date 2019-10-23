@@ -11,4 +11,19 @@ public class CacheContext {
 
     private String resource;
 
+    public XNode getMapperNode() {
+        return mapperNode;
+    }
+
+    public void setMapperNode(XNode mapperNode) {
+        this.mapperNode = mapperNode;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
 }

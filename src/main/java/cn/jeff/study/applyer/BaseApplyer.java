@@ -1,5 +1,6 @@
-package cn.jeff.study.core;
+package cn.jeff.study.applyer;
 
+import cn.jeff.study.core.ConfigurationHelper;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;

@@ -1,8 +1,8 @@
 package cn.jeff.study;
 
 import cn.jeff.study.core.ApplyerFactory;
-import cn.jeff.study.core.BaseApplyer;
-import cn.jeff.study.core.SqlApplyer;
+import cn.jeff.study.applyer.BaseApplyer;
+import cn.jeff.study.applyer.SqlApplyer;
 import org.junit.Test;
 
 /**

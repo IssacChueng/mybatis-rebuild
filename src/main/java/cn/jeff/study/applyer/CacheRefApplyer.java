@@ -1,5 +1,6 @@
-package cn.jeff.study.core;
+package cn.jeff.study.applyer;
 
+import cn.jeff.study.core.MyCacheBuilderAssistant;
 import org.apache.ibatis.builder.CacheRefResolver;
 import org.apache.ibatis.builder.IncompleteElementException;
 import org.apache.ibatis.parsing.XNode;
@@ -29,21 +30,21 @@ public class CacheRefApplyer extends BaseCacheApplyer {
 
     @Override
     protected void doApply() {
-        XNode cacheRefNode = mapperNode.evalNode("cache-ref");
-        cacheRefElement(cacheRefNode);
+        cacheContexts.forEach(cacheContext -> {
+            XNode mapperNode = cacheContext.getMapperNode();
+            builderAssistant = new MyCacheBuilderAssistant(configuration, cacheContext.getResource());
+            setBuildAssistantNamespace(mapperNode);
+            XNode cacheRefNode = mapperNode.evalNode("cache-ref");
+            cacheRefElement(cacheRefNode);
+        });
+
     }
 
     private void cacheRefElement(XNode context) {
         if (context != null) {
-            Map<String, String> cacheRefMap = configurationHelper.getCacheRefMap();
-            cacheRefMap.remove(builderAssistant.getCurrentNamespace());
-            configuration.addCacheRef(builderAssistant.getCurrentNamespace(), context.getStringAttribute("namespace"));
-            CacheRefResolver cacheRefResolver = new CacheRefResolver(builderAssistant, context.getStringAttribute("namespace"));
-            try {
-                cacheRefResolver.resolveCacheRef();
-            } catch (IncompleteElementException e) {
-                configuration.addIncompleteCacheRef(cacheRefResolver);
-            }
+            String cacheRefKey = builderAssistant.getCurrentNamespace();
+            String cacheRefValue = context.getStringAttribute("namespace");
+            cacheRefs.put(cacheRefKey, cacheRefValue);
         }
     }
 }

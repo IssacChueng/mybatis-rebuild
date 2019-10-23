@@ -1,5 +1,6 @@
 package cn.jeff.study.core;
 
+import cn.jeff.study.applyer.BaseApplyer;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
 

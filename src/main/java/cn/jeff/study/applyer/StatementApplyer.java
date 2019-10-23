@@ -1,4 +1,4 @@
-package cn.jeff.study.core;
+package cn.jeff.study.applyer;
 
 import org.apache.ibatis.builder.xml.XMLStatementBuilder;
 import org.apache.ibatis.mapping.MappedStatement;
