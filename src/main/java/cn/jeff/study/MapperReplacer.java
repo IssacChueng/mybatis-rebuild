@@ -14,7 +14,7 @@ public class MapperReplacer {
 
     public void replaceMapperByFile(XNode mapperNode, Configuration configuration, String resource, boolean useCache) throws IOException {
 
-        new MapperApplyerLink(configuration, mapperNode,  resource).callApply();
+        new MapperApplyerLink(configuration, mapperNode, resource).callApply();
 
     }
 
