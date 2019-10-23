@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2009-2017 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.jeff.study.dao.BeanMapper">
+    <cache flushInterval="3000"/>
+    <resultMap id="base" type="cn.jeff.study.model.Bean">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="d" type="cn.jeff.study.model.Bean" extends="base">
+        <result property="desc" jdbcType="VARCHAR" column="id"/>
+    </resultMap>
+
+    <parameterMap id="condition" type="cn.jeff.study.model.Condition">
+        <parameter property="id" jdbcType="VARCHAR" javaType="String"/>
+        <parameter property="name" jdbcType="VARCHAR" javaType="String"/>
+    </parameterMap>
+    <sql id="countId">
+        count(id) + 1
+    </sql>
+
+    <select id="selectOne" resultType="java.lang.Integer">
+        SELECT count(id) + 1 from t_bean
+    </select>
+
+    <select id="selectWithInclude" resultType="java.lang.Integer">
+        SELECT
+        <include refid="countId"/>
+        from t_bean
+    </select>
+
+    <select id="selectObj" resultMap="d">
+        SELECT
+        id, `desc`
+        FROM t_bean
+    </select>
+    <select id="selectOneByCondition" parameterMap="condition" resultMap="d" useCache="true">
+        SELECT
+        id, `desc`
+        FROM t_bean
+        <where>
+            id = #{id}
+            AND
+            `desc` = #{name}
+        </where>
+    </select>
+</mapper>

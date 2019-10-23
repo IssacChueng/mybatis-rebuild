@@ -1,6 +1,7 @@
 package cn.jeff.study;
 
 import cn.jeff.study.applyer.CacheApplyerLink;
+import cn.jeff.study.applyer.MapperApplyerLink;
 import cn.jeff.study.cache.CacheContext;
 import cn.jeff.study.util.CollectionUtils;
 import com.sun.istack.internal.NotNull;
@@ -22,14 +23,14 @@ public class MapperConfiguration {
 
     private Configuration configuration;
 
-    private CacheApplyerLink cacheReplacer;
+    private CacheApplyerLink cacheApplyerLink;
 
-    private List<MapperReplacer> mapperReplacers;
+    private List<MapperApplyerLink> mapperApplyerLinks;
 
 
     public MapperConfiguration(@NotNull Configuration configuration) {
         this.configuration = configuration;
-        mapperReplacers = new LinkedList<>();
+        mapperApplyerLinks = new LinkedList<>();
     }
 
     public MapperConfiguration addResource(@NotNull String resource, @NotNull XNode mapperNode) {
@@ -50,15 +51,24 @@ public class MapperConfiguration {
 
     public void clear() {
         mapperNodes.clear();
-        cacheReplacer = null;
-        if (CollectionUtils.isNotEmpty(mapperReplacers)) {
-            mapperReplacers.clear();
+        cacheApplyerLink = null;
+        if (CollectionUtils.isNotEmpty(mapperApplyerLinks)) {
+            mapperApplyerLinks.clear();
         }
-        mapperReplacers = null;
+        mapperApplyerLinks = null;
     }
 
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    public void parse() {
+        if (configuration.isCacheEnabled()) {
+            cacheApplyerLink.callApply();
+        }
+        if (CollectionUtils.isNotEmpty(mapperApplyerLinks)) {
+            mapperApplyerLinks.forEach(MapperApplyerLink::callApply);
+        }
     }
 
     public static class Builder {
@@ -71,17 +81,20 @@ public class MapperConfiguration {
 
         public MapperConfiguration build() {
             Map<String, XNode> mapperNodesLocal = mapperConfiguration.mapperNodes;
-
-
-            mapperConfiguration.mapperReplacers = new ArrayList<>(mapperNodesLocal.size());
-            if (mapperConfiguration.configuration.isCacheEnabled()) {
+            Configuration configurationLocal = mapperConfiguration.configuration;
+            List<MapperApplyerLink> mapperApplyerLinkLocal = mapperConfiguration.mapperApplyerLinks = new ArrayList<>(mapperNodesLocal.size());
+            if (configurationLocal.isCacheEnabled()) {
                 List<CacheContext> cacheContextList = new ArrayList<>(mapperNodesLocal.size());
                 mapperNodesLocal.forEach((key, value) -> {
                     CacheContext cacheContext = new CacheContext();
                     cacheContext.setMapperNode(value);
                     cacheContext.setResource(key);
+
+                    MapperApplyerLink mapperApplyerLink = new MapperApplyerLink(configurationLocal, value, key);
+                    mapperApplyerLinkLocal.add(mapperApplyerLink);
+
                 });
-                mapperConfiguration.cacheReplacer = new CacheApplyerLink(mapperConfiguration.configuration, null, null, cacheContextList);
+                mapperConfiguration.cacheApplyerLink = new CacheApplyerLink(configurationLocal, null, null, cacheContextList);
             }
             return mapperConfiguration;
         }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2009-2017 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.jeff.study.dao.BeanMapper">
+    <cache eviction="LRU" flushInterval="3000"/>
+    <sql id="countId">
+        count(id)
+    </sql>
+    <sql id="baseSql">
+        id, `desc`
+    </sql>
+    <resultMap id="base" type="cn.jeff.study.model.Bean">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="d" type="cn.jeff.study.model.Bean" extends="base">
+        <result property="desc" jdbcType="VARCHAR" column="desc"/>
+    </resultMap>
+
+    <parameterMap id="condition" type="cn.jeff.study.model.Condition">
+        <parameter property="desc" jdbcType="VARCHAR" javaType="String"/>
+    </parameterMap>
+
+    <select id="getBeanById" resultMap="base">
+        SELECT
+        <include refid="baseSql"/>
+        FROM t_bean
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+</mapper>

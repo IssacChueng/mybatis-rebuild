@@ -41,6 +41,7 @@
 
     <mappers>
         <mapper resource="mapper/ObjectMapper.xml"/>
+        <mapper resource="mapper/BeanMapper.xml"/>
     </mappers>
 
 </configuration>

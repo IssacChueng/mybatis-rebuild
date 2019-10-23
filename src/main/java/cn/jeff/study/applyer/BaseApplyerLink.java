@@ -38,15 +38,20 @@ public abstract class BaseApplyerLink {
         this.resource = resource;
         configurationHelper = new ConfigurationHelper(configuration);
         builderAssistant = new MyMapperBuilderAssistant(configuration, resource);
-        namespace = mapperNode.getStringAttribute("namespace");
-        if (namespace == null || namespace.equals("")) {
-            throw new IllegalArgumentException("namespace can not be empty");
+
+        if (mapperNode != null) {
+            namespace = mapperNode.getStringAttribute("namespace");
+            if (namespace == null || namespace.equals("")) {
+                throw new IllegalArgumentException("namespace can not be empty");
+            }
+            builderAssistant.setCurrentNamespace(namespace);
+            //此时已经处理好所有缓存
+            if (configuration.isCacheEnabled()) {
+                builderAssistant.useCacheRef(namespace);
+            }
         }
-        builderAssistant.setCurrentNamespace(namespace);
-        //此时已经处理好所有缓存
-        if (configuration.isCacheEnabled()) {
-            builderAssistant.useCacheRef(namespace);
-        }
+
+
 
         setApplyerClass();
         initApplyers();
@@ -57,12 +62,15 @@ public abstract class BaseApplyerLink {
     protected void initApplyers() {
         ApplyerFactory applyerFactory = new ApplyerFactory(configuration, mapperNode, namespace);
         MapperBuilderAssistant builderAssistant = new MyMapperBuilderAssistant(configuration, resource);
-        builderAssistant.setCurrentNamespace(namespace);
-        if (configuration.isCacheEnabled()) {
-            //不推荐生产环境使用,因为缓存和session有关,存放在executor中, 这里只清理了Mapper中定义的cache,无法清理localCache 并且代价是原来的Cache将会被保留在Executor的tcm里面
-            //设置使用的缓存
-            builderAssistant.useCacheRef(namespace);
+        if (namespace != null && !"".equals(namespace)) {
+            builderAssistant.setCurrentNamespace(namespace);
+            if (configuration.isCacheEnabled()) {
+                //不推荐生产环境使用,因为缓存和session有关,存放在executor中, 这里只清理了Mapper中定义的cache,无法清理localCache 并且代价是原来的Cache将会被保留在Executor的tcm里面
+                //设置使用的缓存
+                builderAssistant.useCacheRef(namespace);
+            }
         }
+
 
         for (int i = 0; i < applyerClasses.size(); i++) {
             Class<? extends BaseApplyer> applyerClass = applyerClasses.get(i);

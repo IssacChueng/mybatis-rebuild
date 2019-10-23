@@ -26,6 +26,7 @@ public class CacheApplyerLink extends BaseApplyerLink {
     public CacheApplyerLink(Configuration configuration, XNode mapperNode, String resource, List<CacheContext> cacheContexts) {
         super(configuration, mapperNode,  resource);
         this.cacheContexts = cacheContexts;
+        initCacheApplyers();
     }
 
 
@@ -35,9 +36,7 @@ public class CacheApplyerLink extends BaseApplyerLink {
         applyerClasses = Arrays.asList(CacheApplyer.class, CacheRefApplyer.class);
     }
 
-    @Override
-    protected void initApplyers() {
-        super.initApplyers();
+    protected void initCacheApplyers() {
         List<BaseApplyer> delegate = getDelegate();
         delegate.forEach(applyer -> {
             if (applyer instanceof BaseCacheApplyer) {
