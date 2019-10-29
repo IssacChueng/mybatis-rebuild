@@ -10,6 +10,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,9 +37,16 @@ public class MapperTests {
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
             Configuration configuration = sqlSessionFactory.getConfiguration();
             DataSource dataSource = configuration.getEnvironment().getDataSource();
-            runScript(dataSource);
+            runScript(dataSource, "Init.sql");
 
         }
+    }
+
+    @After
+    public void release() throws IOException, SQLException {
+        System.out.println("release tables");
+        DataSource dataSource = sqlSessionFactory.getConfiguration().getEnvironment().getDataSource();
+        runScript(dataSource, "Release.sql");
     }
 
     @Test
@@ -118,10 +126,10 @@ public class MapperTests {
     }
 
 
-    private void runScript(DataSource dataSource) throws SQLException, IOException {
+    private void runScript(DataSource dataSource, String sql) throws SQLException, IOException {
         try (Connection connection = dataSource.getConnection()) {
             ScriptRunner scriptRunner = new ScriptRunner(connection);
-            runScript(scriptRunner, "Init.sql");
+            runScript(scriptRunner, sql);
         }
 
     }
@@ -131,4 +139,6 @@ public class MapperTests {
             scriptRunner.runScript(reader);
         }
     }
+
+
 }

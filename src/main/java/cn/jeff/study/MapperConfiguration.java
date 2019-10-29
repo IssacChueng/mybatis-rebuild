@@ -4,7 +4,6 @@ import cn.jeff.study.applyer.CacheApplyerLink;
 import cn.jeff.study.applyer.MapperApplyerLink;
 import cn.jeff.study.cache.CacheContext;
 import cn.jeff.study.util.CollectionUtils;
-import com.sun.istack.internal.NotNull;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.session.Configuration;
 
@@ -28,12 +27,12 @@ public class MapperConfiguration {
     private List<MapperApplyerLink> mapperApplyerLinks;
 
 
-    public MapperConfiguration(@NotNull Configuration configuration) {
+    public MapperConfiguration(Configuration configuration) {
         this.configuration = configuration;
         mapperApplyerLinks = new LinkedList<>();
     }
 
-    public MapperConfiguration addResource(@NotNull String resource, @NotNull XNode mapperNode) {
+    public MapperConfiguration addResource(String resource, XNode mapperNode) {
         if (mapperNodes.containsKey(resource)) {
             throw new IllegalArgumentException("已经存在该资源");
         }
@@ -98,7 +97,7 @@ public class MapperConfiguration {
             }
             return mapperConfiguration;
         }
-        public Builder addResource(@NotNull String resource, @NotNull XNode mapperNode) {
+        public Builder addResource(String resource, XNode mapperNode) {
             mapperConfiguration.mapperNodes.put(resource, mapperNode);
             return this;
         }

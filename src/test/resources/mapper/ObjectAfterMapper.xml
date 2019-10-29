@@ -51,6 +51,7 @@
         SELECT
         id, name
         FROM t_o
+        LIMIT 1
     </select>
     <select id="selectObjCondition" parameterMap="condition" resultMap="d" useCache="true">
         SELECT
