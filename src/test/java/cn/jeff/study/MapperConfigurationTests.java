@@ -31,6 +31,7 @@ public class MapperConfigurationTests {
         try (Reader reader = Resources.getResourceAsReader("mybatis-config.xml")) {
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
             Configuration configuration = sqlSessionFactory.getConfiguration();
+            configuration.setCacheEnabled(false);
             DataSource dataSource = configuration.getEnvironment().getDataSource();
             runScript(dataSource, "Init.sql");
         }
@@ -49,8 +50,8 @@ public class MapperConfigurationTests {
         BeanMapper mapper = sqlSession.getMapper(BeanMapper.class);
         Condition condition = new Condition();
         condition.setName("2");
-        //Bean bean = mapper.selectOneByCondition(condition);
-        //System.out.println(bean);
+        /*Bean bean = mapper.selectOneByCondition(condition);
+        System.out.println(bean);*/
         MapperConfiguration.Builder builder = new MapperConfiguration.Builder(sqlSessionFactory.getConfiguration());
         FileReader mapperXml = new FileReader(Resources.getResourceAsFile("mapper/BeanAfterMapper.xml"));
         XPathParser parser = new XPathParser(mapperXml);

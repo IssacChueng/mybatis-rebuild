@@ -89,12 +89,16 @@ public class MapperConfiguration {
                     cacheContext.setMapperNode(value);
                     cacheContext.setResource(key);
 
-                    MapperApplyerLink mapperApplyerLink = new MapperApplyerLink(configurationLocal, value, key);
-                    mapperApplyerLinkLocal.add(mapperApplyerLink);
 
                 });
                 mapperConfiguration.cacheApplyerLink = new CacheApplyerLink(configurationLocal, null, null, cacheContextList);
             }
+
+            mapperNodesLocal.forEach((key, value) -> {
+
+                MapperApplyerLink mapperApplyerLink = new MapperApplyerLink(configurationLocal, value, key);
+                mapperApplyerLinkLocal.add(mapperApplyerLink);
+            });
             return mapperConfiguration;
         }
         public Builder addResource(String resource, XNode mapperNode) {
