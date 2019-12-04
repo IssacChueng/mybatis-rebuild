@@ -57,7 +57,9 @@
         id, desc
         FROM t_bean
         <where>
-            id = #{id}
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
             AND
             desc = #{name}
         </where>
